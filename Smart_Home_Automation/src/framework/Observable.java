@@ -13,6 +13,7 @@ public class Observable {
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
+    //changes in eclips
 
     public void deleteObserver(Observer observer) {
         observers.remove(observer);
