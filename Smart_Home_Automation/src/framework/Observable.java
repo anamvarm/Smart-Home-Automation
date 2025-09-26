@@ -53,5 +53,6 @@ public class Observable {
  * Observer interface
  */
 interface Observer {
+    //changes to see in eclips
     void update(Observable observable, Object arg);
 }
