@@ -10,7 +10,7 @@ public class TestClient extends AbstractClient {
 
     @Override
     protected void handleMessageFromServer(Object message) {
-        System.out.println("📨 Received from server: " + message);
+        System.out.println("📨 Server response: " + message);
     }
 
     public static void main(String[] args) {
@@ -19,15 +19,26 @@ public class TestClient extends AbstractClient {
             System.out.println("🔗 Connecting to server...");
             client.openConnection();
             
-            // Send a test message
-            System.out.println("📤 Sending test message to server...");
+            Thread.sleep(500);
+            
+            // Test 1: Plain text
+            System.out.println("\n📤 Test 1: Sending plain text...");
             client.sendToServer("Hello Server!");
+            Thread.sleep(1000);
             
-            // Keep the client running for a bit to receive response
-            Thread.sleep(3000);
+            // Test 2: Structured command as string
+            System.out.println("\n📤 Test 2: Sending GET_STATUS command...");
+            client.sendToServer("GET_STATUS|LIGHT|kitchen-light");
+            Thread.sleep(1000);
             
+            // Test 3: Another structured command
+            System.out.println("\n📤 Test 3: Sending TURN_ON command...");
+            client.sendToServer("TURN_ON|LIGHT|living-room-light");
+            Thread.sleep(1000);
+            
+            Thread.sleep(2000);
             client.closeConnection();
-            System.out.println("✅ Test completed successfully!");
+            System.out.println("\n✅ All tests completed!");
             
         } catch (Exception e) {
             System.err.println("💥 Client error: " + e.getMessage());

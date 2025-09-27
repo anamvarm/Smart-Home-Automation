@@ -61,7 +61,7 @@ public abstract class AbstractServer {
      * Send a message to a specific client
      */
     public void sendToClient(Socket clientSocket, Object message) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+    	ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
         out.writeObject(message);
         out.flush();
     }
@@ -97,7 +97,7 @@ public abstract class AbstractServer {
         public void run() {
             try (ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())) {
                 while (connected) {
-                    Object message = in.readObject();
+                	Object message = in.readObject();
                     server.handleMessageFromClient(message, clientSocket);
                 }
             } catch (Exception e) {
