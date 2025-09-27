@@ -71,8 +71,10 @@ public abstract class AbstractClient {
         @Override
         public void run() {
             try (ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())) {
+                System.out.println("🔍 ServerListener started, waiting for messages...");
                 while (connected) {
                     Object message = in.readObject();
+                    System.out.println("🔍 Received message in ServerListener: " + message);
                     handleMessageFromServer(message);
                 }
             } catch (Exception e) {
