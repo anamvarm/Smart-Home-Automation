@@ -22,21 +22,26 @@ public class TestServer extends AbstractServer {
                     // Format: "GET_STATUS|LIGHT|kitchen-light"
                     String[] parts = msg.split("\\|");
                     String response = "STATUS|ONLINE|" + parts[2] + "|Device is online";
+                    System.out.println("📤 Sending response: " + response);
                     sendToClient(clientSocket, response);
                     
                 } else if (msg.startsWith("TURN_ON|")) {
                     // Format: "TURN_ON|LIGHT|living-room-light"
                     String[] parts = msg.split("\\|");
                     String response = "SUCCESS|TURN_ON|" + parts[2] + "|Device turned on";
+                    System.out.println("📤 Sending response: " + response);
                     sendToClient(clientSocket, response);
                     
                 } else {
                     // Plain text echo
-                    sendToClient(clientSocket, "ECHO: " + msg);
+                    String response = "ECHO: " + msg;
+                    System.out.println("📤 Sending response: " + response);
+                    sendToClient(clientSocket, response);
                 }
             }
         } catch (Exception e) {
             System.err.println("❌ Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

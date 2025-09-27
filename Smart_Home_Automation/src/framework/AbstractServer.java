@@ -61,9 +61,20 @@ public abstract class AbstractServer {
      * Send a message to a specific client
      */
     public void sendToClient(Socket clientSocket, Object message) throws IOException {
-    	ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
-        out.writeObject(message);
-        out.flush();
+        // Find the client handler for this socket and use its output stream
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (client.getSocket().equals(clientSocket) && client.isConnected()) {
+                    ObjectOutputStream out = client.getOutputStream();
+                    if (out != null) {
+                        out.writeObject(message);
+                        out.flush();
+                        return;
+                    }
+                }
+            }
+        }
+        throw new IOException("Client not found or not connected");
     }
 
     /**
@@ -84,6 +95,7 @@ public abstract class AbstractServer {
         private Socket clientSocket;
         private AbstractServer server;
         private boolean connected = true;
+        private ObjectOutputStream outputStream;
 
         public ClientHandler(Socket socket, AbstractServer server) {
             this.clientSocket = socket;
@@ -92,10 +104,14 @@ public abstract class AbstractServer {
 
         public Socket getSocket() { return clientSocket; }
         public boolean isConnected() { return connected; }
+        public ObjectOutputStream getOutputStream() { return outputStream; }
 
         @Override
         public void run() {
             try (ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())) {
+                // Create the output stream once and reuse it
+                outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                
                 while (connected) {
                 	Object message = in.readObject();
                     server.handleMessageFromClient(message, clientSocket);
@@ -104,6 +120,14 @@ public abstract class AbstractServer {
                 connected = false;
                 clients.remove(this);
                 server.clientDisconnected(clientSocket);
+            } finally {
+                try {
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
+                } catch (IOException e) {
+                    // Ignore close errors
+                }
             }
         }
     }
