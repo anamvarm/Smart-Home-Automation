@@ -264,26 +264,6 @@ java -cp bin client.TestClient
 4. Add tests for new functionality
 5. Submit a pull request
 
-## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🆘 Support
 
-For support and questions:
-- Create an issue in the repository
-- Check the troubleshooting section
-- Review the code documentation
-
-## 🔮 Future Enhancements
-
-- **Mobile App**: Android/iOS companion app
-- **Web Interface**: Browser-based control panel
-- **Voice Control**: Integration with voice assistants
-- **Machine Learning**: Predictive automation based on usage patterns
-- **Cloud Integration**: Remote access and cloud storage
-- **Energy Monitoring**: Power consumption tracking and optimization
-
----
-
-**Built with ❤️ using Java Swing and modern software engineering practices**
